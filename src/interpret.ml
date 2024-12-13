@@ -72,15 +72,21 @@ let rec evalE : Syntax.expE -> (value environment) -> value =
    | IfEqE(e0L,e0R,e1,e2) -> 
       let eqLHS = evalE e0L env in
       let eqRHS = evalE e0R env in
-      if eqLHS = eqRHS
-        then evalE e1 env
-        else evalE e2 env
+      (match (eqLHS, eqRHS) with
+        | (NumV n1, NumV n2) ->
+            if n1 = n2
+              then evalE e1 env
+              else evalE e2 env
+        | _ -> raise OperandNotInteger)
    | IfLtE(e0L,e0R,e1,e2) -> 
       let ltLHS = evalE e0L env in
       let ltRHS = evalE e0R env in
-      if ltLHS < ltRHS 
-        then evalE e1 env
-        else evalE e2 env
+      (match (ltLHS, ltRHS) with
+        | (NumV n1, NumV n2) ->
+            if n1 < n2
+              then evalE e1 env
+              else evalE e2 env
+        | _ -> raise OperandNotInteger)
    | PlusE(e1,e2) ->
       let lhs = evalE e1 env in
       let rhs = evalE e2 env in

@@ -166,7 +166,7 @@ and typeIfE exps cenv tenv =
   match exps with (e0L, e0R, e1, e2) ->
     let e0Lt = typeE e0L cenv tenv in
     let e0Rt = typeE e0L cenv tenv in
-      if e0Lt != IntY && e0Rt != e0Lt
+      if e0Lt != IntY || e0Rt != e0Lt
         then raise OperandNotIntegerType
       else
         let e1t = typeE e1 cenv tenv in
